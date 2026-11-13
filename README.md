@@ -147,22 +147,19 @@ npm run lint --prefix frontend
 5. **Health Check Path**: Set to `/api/health`.
 6. Click **Create Web Service**. Note your public URL (e.g., `https://reportsaathi-backend.onrender.com`).
 
-### B. Frontend on Cloudflare Pages
-1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) and navigate to **Workers & Pages** -> **Create application** -> **Pages**.
-2. Connect your Git repository.
-3. Configure the Build settings:
-   - **Framework preset**: `Vite`
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Root directory**: `frontend`
-4. Configure Environment Variables under **Settings** -> **Environment variables**:
-   - `VITE_API_BASE_URL`: `https://reportsaathi-backend.onrender.com/api`
-   - `VITE_SUPABASE_URL`: `https://<your-supabase-url>.supabase.co`
-   - `VITE_SUPABASE_ANON_KEY`: `<your-supabase-anon-key>`
-5. Click **Save and Deploy**. Cloudflare Pages will build and deploy your global frontend.
-6. Copy your production Cloudflare URL and ensure it is included in Render's `CORS_ORIGINS` variable.
-
----
+###B. Frontend (Vercel)
+Open vercel.comand sign in (continue with GitHub).
+Click "Add New..." -> Project.
+Select and import your GitHub repository: paviachar/Workshop.
+Configure the project settings:
+Framework Preset: Vite
+Root Directory: Click Edit next to Root Directory, select frontend, and click Continue.
+Build Command: npm run build (pre-filled by default)
+Output Directory: dist (pre-filled by default)
+Expand the Environment Variables section and add:
+Key: VITE_API_BASE_URL
+Value: https://reportsaathi-backend.onrender.com/api
+Click Deploy.
 
 ## 📋 QA & Pre-Deployment Checklist
 
