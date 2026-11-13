@@ -1,0 +1,24 @@
+==============================================================
+                 APOLLO DIAGNOSTICS & RESEARCH
+                 FASTING LIPID PROFILE REPORT
+==============================================================
+Patient Name : Sunita Patel          Age / Gender : 51 Y / Female
+Referred By  : Dr. Sneha Rao         Date         : 10-Nov-2026
+Fasting Time : 12 Hours              Lab ID       : AP-88204
+--------------------------------------------------------------
+INVESTIGATION             VALUE     UNIT        DESIRABLE RANGE
+--------------------------------------------------------------
+Total Cholesterol         242       mg/dL       < 200        [HIGH]
+Triglycerides             215       mg/dL       < 150        [HIGH]
+HDL Cholesterol           42        mg/dL       > 50         [LOW]
+LDL Cholesterol           157       mg/dL       < 100        [HIGH]
+VLDL Cholesterol          43        mg/dL       < 30         [HIGH]
+Cholesterol / HDL Ratio   5.76                  < 4.5        [HIGH]
+LDL / HDL Ratio           3.74                  < 3.0        [HIGH]
+--------------------------------------------------------------
+INTERPRETATION GUIDELINES:
+- Borderline High Total Cholesterol: 200 - 239 mg/dL
+- High Total Cholesterol: >= 240 mg/dL
+- Borderline High Triglycerides: 150 - 199 mg/dL
+- High Triglycerides: 200 - 499 mg/dL
+*** End of Report ***
