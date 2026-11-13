@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
     
+    # Telegram Bot API (optional)
+    TELEGRAM_BOT_TOKEN: str = ""
+    
     # OCR
     TESSERACT_CMD: str = ""
 

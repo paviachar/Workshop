@@ -27,6 +27,7 @@ import {
   Loader2
 } from 'lucide-react'
 import DisclaimerBanner from './DisclaimerBanner'
+import ReportChat from './ReportChat'
 
 export default function ResultsPage({
   report,
@@ -263,6 +264,9 @@ export default function ResultsPage({
           </div>
         </div>
       </div>
+
+      {/* Report-Specific Interactive Chat Assistant */}
+      <ReportChat report={report} />
 
       {/* Questions for Doctor Section */}
       {doctorQuestions && doctorQuestions.length > 0 && (

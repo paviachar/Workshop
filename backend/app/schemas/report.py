@@ -23,6 +23,7 @@ class ReportSummary(BaseModel):
         default=None,
         description="Advisory to consult a qualified clinician if any part of the report is unclear"
     )
+    key_highlights: List[str] = Field(default_factory=list, description="Key high-level takeaway highlights")
     questions_for_doctor: List[str] = Field(default_factory=list, description="Constructive, actionable questions to ask their doctor")
     educational_disclaimer: str = Field(
         default="ReportSaathi is an educational reference tool. It does not provide medical diagnoses, treatment plans, or clinical certainty. Always consult a qualified medical clinician.",

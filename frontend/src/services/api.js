@@ -36,3 +36,34 @@ export async function uploadAndAnalyzeReport(file) {
 
   return await res.json()
 }
+
+export async function askReportChat(report, question, chatHistory = []) {
+  if (!question || !question.trim()) {
+    throw new Error('Please enter a question about your report.')
+  }
+
+  const res = await fetch(`${API_BASE}/chat/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      report,
+      question: question.trim(),
+      chat_history: chatHistory
+    })
+  })
+
+  if (!res.ok) {
+    let errorDetail = `Chat request failed with status ${res.status}`
+    try {
+      const errJson = await res.json()
+      errorDetail = errJson.detail || errorDetail
+    } catch {
+      // fallback
+    }
+    throw new Error(errorDetail)
+  }
+
+  return await res.json()
+}

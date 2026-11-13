@@ -99,6 +99,11 @@ EDUCATIONAL_GLOSSARY = {
         "explanation": "A type of fat in your blood formed from excess calories and simple carbohydrates.",
         "analogy": "Surplus fuel stored away in backup tanks for future energy."
     },
+    "triglycerides": {
+        "name": "Triglycerides",
+        "explanation": "A type of fat in your blood formed from excess calories and simple carbohydrates.",
+        "analogy": "Surplus fuel stored away in backup tanks for future energy."
+    },
     "hdl": {
         "name": "HDL Cholesterol (Good)",
         "explanation": "High-Density Lipoprotein sweeps away excess cholesterol from arteries back to the liver for clearance.",
