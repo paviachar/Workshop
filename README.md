@@ -157,9 +157,6 @@ Root Directory: Click Edit next to Root Directory, select frontend, and click Co
 Build Command: npm run build (pre-filled by default)
 Output Directory: dist (pre-filled by default)
 Expand the Environment Variables section and add:
-Key: VITE_API_BASE_URL
-Value: https://reportsaathi-backend.onrender.com/api
-Click Deploy.
 
 ## 📋 QA & Pre-Deployment Checklist
 
