@@ -7,18 +7,23 @@ import {
   Sparkles,
   ArrowRight,
   Bug,
-  FileText
+  ShieldCheck,
+  Check,
+  Info
 } from 'lucide-react'
 
 export default function UploadModal({
   isOpen,
   onClose,
   onStartLoading,
-  onSelectSamplePreset
+  onSelectSamplePreset,
+  isCloudConnected,
+  currentUser
 }) {
   const [selectedFile, setSelectedFile] = useState(null)
   const [error, setError] = useState(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [shouldSave, setShouldSave] = useState(false) // Strict opt-in: default to false
   const fileInputRef = useRef(null)
 
   if (!isOpen) return null
@@ -75,7 +80,7 @@ export default function UploadModal({
 
   const handleAnalyze = () => {
     if (!selectedFile) return
-    onStartLoading(selectedFile)
+    onStartLoading(selectedFile, shouldSave)
   }
 
   const handleSimulateError = () => {
@@ -163,6 +168,52 @@ export default function UploadModal({
           )}
         </div>
 
+        {/* User Privacy & Opt-in Save Choice */}
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+          <label className="flex items-start gap-3 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={shouldSave}
+              onChange={(e) => setShouldSave(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            />
+            <div className="space-y-1">
+              <span className="text-xs sm:text-sm font-bold text-slate-900 block">
+                Save educational summary to report history
+              </span>
+              <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                {shouldSave ? (
+                  isCloudConnected && currentUser ? (
+                    <span className="text-emerald-700 font-medium">
+                      ✓ Will sync to your private Supabase account ({currentUser.email}).
+                    </span>
+                  ) : (
+                    <span className="text-blue-700 font-medium">
+                      ✓ Will be saved locally in this browser session. (Demo mode)
+                    </span>
+                  )
+                ) : (
+                  <span className="text-slate-500">
+                    Unchecked by default. Report will be analyzed and shown in this session without permanent storage.
+                  </span>
+                )}
+              </p>
+            </div>
+          </label>
+
+          {/* Privacy & Storage Transparency Box */}
+          <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-500 space-y-1">
+            <div className="flex items-center gap-1.5 font-semibold text-slate-700">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+              <span>ReportSaathi Privacy Guarantee:</span>
+            </div>
+            <p className="leading-relaxed">
+              We <strong>do not store</strong> your uploaded PDF/image files or raw extracted medical OCR text.
+              {shouldSave && ' If saving is enabled, only structured educational findings and doctor questions are stored, and you can delete them anytime.'}
+            </p>
+          </div>
+        </div>
+
         {/* Error Alert State */}
         {error && (
           <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
@@ -198,7 +249,7 @@ export default function UploadModal({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
             <button
               type="button"
-              onClick={() => onSelectSamplePreset('cbc_pdf')}
+              onClick={() => onSelectSamplePreset('cbc_pdf', shouldSave)}
               className="p-2.5 rounded-xl bg-blue-50/70 hover:bg-blue-100 border border-blue-200 text-blue-800 font-semibold text-left transition-colors cursor-pointer"
             >
               <span className="block font-bold">CBC PDF Report</span>
@@ -207,7 +258,7 @@ export default function UploadModal({
 
             <button
               type="button"
-              onClick={() => onSelectSamplePreset('lipid_png')}
+              onClick={() => onSelectSamplePreset('lipid_png', shouldSave)}
               className="p-2.5 rounded-xl bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 font-semibold text-left transition-colors cursor-pointer"
             >
               <span className="block font-bold">Lipid Profile (PNG)</span>
@@ -216,7 +267,7 @@ export default function UploadModal({
 
             <button
               type="button"
-              onClick={() => onSelectSamplePreset('unclear_missing_range')}
+              onClick={() => onSelectSamplePreset('unclear_missing_range', shouldSave)}
               className="p-2.5 rounded-xl bg-amber-50/70 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-left transition-colors cursor-pointer"
               title="Test with report missing reference ranges to verify strict no-inventing rule"
             >

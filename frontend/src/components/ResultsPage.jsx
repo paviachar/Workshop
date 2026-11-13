@@ -19,14 +19,27 @@ import {
   FileText,
   ShieldAlert,
   HelpCircle as QuestionIcon,
-  Tag
+  Tag,
+  Trash2,
+  BookmarkCheck,
+  HardDrive,
+  Cloud,
+  Loader2
 } from 'lucide-react'
 import DisclaimerBanner from './DisclaimerBanner'
 
-export default function ResultsPage({ report, onBackToDashboard, onUploadNew }) {
+export default function ResultsPage({
+  report,
+  onBackToDashboard,
+  onUploadNew,
+  onDeleteReport,
+  isCloudConnected,
+  currentUser
+}) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('all') // 'all' | 'flagged' | 'normal'
   const [copiedQuestions, setCopiedQuestions] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const summary = report?.summary || {}
   const findings = report?.findings || report?.structured_data || []
@@ -70,6 +83,24 @@ export default function ResultsPage({ report, onBackToDashboard, onUploadNew }) 
     window.print()
   }
 
+  const handleDelete = async () => {
+    if (!window.confirm('Delete this report from your history? This will permanently remove its educational findings.')) {
+      return
+    }
+    setIsDeleting(true)
+    try {
+      if (onDeleteReport) {
+        await onDeleteReport(report.id)
+      }
+      onBackToDashboard()
+    } catch (err) {
+      alert('Could not delete report: ' + err.message)
+      setIsDeleting(false)
+    }
+  }
+
+  const isSaved = report.isSaved === true || report.saved_to_supabase === true
+
   return (
     <div className="space-y-8 pb-16 print:p-0">
       {/* Top Action Bar */}
@@ -82,7 +113,43 @@ export default function ResultsPage({ report, onBackToDashboard, onUploadNew }) 
           <span>Back to Dashboard</span>
         </button>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Storage status badge */}
+          {isSaved ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              {isCloudConnected && currentUser ? (
+                <>
+                  <Cloud className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Saved to Supabase</span>
+                </>
+              ) : (
+                <>
+                  <BookmarkCheck className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Saved to Local History</span>
+                </>
+              )}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200" title="Not stored permanently. Close or refresh to discard.">
+              <span>Transient (Not Saved)</span>
+            </span>
+          )}
+
+          {/* Delete Option */}
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 transition-colors shadow-2xs cursor-pointer"
+            title="Delete this report record"
+          >
+            {isDeleting ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-600" />
+            ) : (
+              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+            )}
+            <span>Delete</span>
+          </button>
+
           <button
             onClick={handlePrint}
             className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
@@ -182,8 +249,18 @@ export default function ResultsPage({ report, onBackToDashboard, onUploadNew }) 
             <span>Compassionate Educational Overview:</span>
           </div>
           <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-            {summary.overall_summary || report.overallSummary}
+            {summary.overall_summary || summary.overall_overview || report.overallSummary}
           </p>
+        </div>
+
+        {/* Transparency note on stored data */}
+        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs text-slate-600 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
+            <span>
+              <strong>What is stored?</strong> Only the structured findings, overview, and doctor questions shown here. The original file and raw medical text are not saved.
+            </span>
+          </div>
         </div>
       </div>
 
